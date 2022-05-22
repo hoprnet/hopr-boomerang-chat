@@ -3,10 +3,11 @@ import WebSocketHandler from "./WebSocketHandler";
 import "./styles.css";
 
 export default function App() {
+  const params = new URLSearchParams(window.location.search)
+  
   const [message, setMessage] = useState("Hello world");
-  const [securityToken, setSecurityToken] = useState("");
-  const [wsEndpoint, setWsEndpoint] = useState("ws://localhost:3000");
-  const [httpEndpoint, setHTTPEndpoint] = useState("http://localhost:3001");
+  const [securityToken, setSecurityToken] = useState(params.get('securityToken') || '');
+  const [apiEndpoint, setAPIEndpoint] = useState(params.get('apiEndpoint') || 'http://localhost:3001');
   const [address, setAddress] = useState("");
 
   const getHeaders = (isPost = false) => {
@@ -22,7 +23,7 @@ export default function App() {
   useEffect(() => {
     const loadAddress = async () => {
       const headers = getHeaders();
-      const account = await fetch(`${httpEndpoint}/api/v2/account/address`, {
+      const account = await fetch(`${apiEndpoint}/api/v2/account/addresses`, {
         headers
       })
         .then((res) => res.json())
@@ -30,11 +31,11 @@ export default function App() {
       setAddress(account?.hoprAddress);
     };
     loadAddress();
-  }, [securityToken, httpEndpoint]);
+  }, [securityToken, apiEndpoint]);
 
   const sendMessage = async () => {
     if (!address) return;
-    await fetch(`${httpEndpoint}/api/v2/messages`, {
+    await fetch(`${apiEndpoint}/api/v2/messages`, {
       method: "POST",
       headers: getHeaders(true),
       body: JSON.stringify({
@@ -47,24 +48,13 @@ export default function App() {
   return (
     <div>
       <div>
-        <label>WS Endpoint</label>{" "}
+        <label>API Endpoint</label>{" "}
         <input
-          name="wsEndpoint"
-          placeholder={wsEndpoint}
-          value={wsEndpoint}
+          name="apiEndpoint"
+          placeholder={apiEndpoint}
+          value={apiEndpoint}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setWsEndpoint(e.target.value)
-          }
-        />
-      </div>
-      <div>
-        <label>HTTP Endpoint</label>{" "}
-        <input
-          name="httpEndpoint"
-          placeholder={httpEndpoint}
-          value={httpEndpoint}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setHTTPEndpoint(e.target.value)
+            setAPIEndpoint(e.target.value)
           }
         />
       </div>
@@ -82,7 +72,7 @@ export default function App() {
       <div>
         <label>Send a message</label>{" "}
         <input
-          name="httpEndpoint"
+          name="message"
           value={message}
           placeholder={message}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -93,7 +83,7 @@ export default function App() {
       <button onClick={() => sendMessage()}>Send message to node</button>
       <br />
       <br />
-      <WebSocketHandler wsEndpoint={wsEndpoint} securityToken={securityToken} />
+      <WebSocketHandler wsEndpoint={`${apiEndpoint}/api/v2/messages/websocket`} securityToken={securityToken} />
     </div>
   );
 }

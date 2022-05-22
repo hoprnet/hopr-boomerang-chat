@@ -65,6 +65,7 @@ const useWebsocket = (settings: Settings) => {
     // need to set the token in the query parameters, to enable websocket authentication
     try {
       const wsUrl = new URL(settings.wsEndpoint);
+      wsUrl.protocol = wsUrl.protocol === 'https:' ? 'wss' : 'ws'
 
       if (settings.securityToken) {
         wsUrl.search = `?apiToken=${settings.securityToken}`;
