@@ -23,10 +23,6 @@
 
 Boomerang Chat is a simple app which sends a message to the HOPR Network which then returns it to the sender. Because nodes in the network have no idea who sent the message and who’s the final recipient, a node can always send a message to itself and no other node would be any the wiser. HOPR nodes only know who to forward the message to next.
 
-## Demo
-
-https://user-images.githubusercontent.com/94027312/171310118-ef23bb7b-cd45-4227-95dc-c75714c1ae43.mov
-
 
 ## Gitpod Setup
 
@@ -67,5 +63,8 @@ npm run start
 
 See application running in `http://localhost:8080`
 
+## Demo
+
+https://user-images.githubusercontent.com/94027312/171310118-ef23bb7b-cd45-4227-95dc-c75714c1ae43.mov
 
 
