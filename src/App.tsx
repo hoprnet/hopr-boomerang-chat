@@ -6,7 +6,7 @@ export default function App() {
   const params = new URLSearchParams(window.location.search)
   
   const [message, setMessage] = useState("Hello world");
-  const [securityToken, setSecurityToken] = useState(params.get('securityToken') || '');
+  const [securityToken, setSecurityToken] = useState(params.get('apiToken') || '');
   const [apiEndpoint, setAPIEndpoint] = useState(params.get('apiEndpoint') || 'http://localhost:3001');
   const [address, setAddress] = useState("");
 
